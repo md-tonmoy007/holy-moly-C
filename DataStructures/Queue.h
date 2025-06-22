@@ -16,7 +16,7 @@ struct Queue_int
     // int (*is_empty) (struct Queue_int* queue);
 };
 
-Queue_int queue_int_constructor(void);
+struct Queue_int queue_int_constructor(void);
 
 
 

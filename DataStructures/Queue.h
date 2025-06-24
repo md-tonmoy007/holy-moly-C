@@ -5,18 +5,18 @@
 
 #include "LinkedList.h"
 
-struct Queue_int
+struct Queue
 {
     /* data */
-    struct LinkedList_int list;
+    struct LinkedList list;
 
-    void (*push) (int data, struct Queue_int* queue);
-    int (*pop) (struct Queue_int* queue);
-    // int (*peek) (struct Queue_int* queue);
-    // int (*is_empty) (struct Queue_int* queue);
+    void (*push) (int data, struct Queue* queue);
+    int (*pop) (struct Queue* queue);
+    // int (*peek) (struct Queue* queue);
+    // int (*is_empty) (struct Queue* queue);
 };
 
-struct Queue_int queue_int_constructor(void);
+struct Queue queue_constructor(void);
 
 
 

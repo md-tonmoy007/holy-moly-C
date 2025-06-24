@@ -9,7 +9,6 @@ enum DataType {
     DOUBLE,
     CHAR,
     Bool,
-    STRING
 };
 
 

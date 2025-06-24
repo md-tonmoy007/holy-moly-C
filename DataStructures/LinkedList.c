@@ -3,28 +3,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct Node_int *create_node_int(int data);
-void destroy_node_int(struct Node_int* node);
-struct Node_int* iterate_int(int index, struct LinkedList_int* list);
-void insert_node_int(int index, int data, struct LinkedList_int* linked_list);
-void remove_node_int(int index, struct LinkedList_int* linked_list);
-int retrieve_data_int(int index, struct LinkedList_int* linked_list);
+struct Node *create_node(void* data);
+void destroy_node(struct Node* node);
+struct Node* iterate(int index, struct LinkedList* list);
+void insert_node(int index, void* data, struct LinkedList* linked_list);
+void remove_node(int index, struct LinkedList* linked_list);
+void* retrieve_data(int index, struct LinkedList* linked_list);
 
 
-struct LinkedList_int linked_list_int_constructor(){
-    struct LinkedList_int new_list;
+struct LinkedList linked_list_constructor(){
+    struct LinkedList new_list;
     new_list.head = NULL;
     new_list.length = 0;
 
-    new_list.insert = insert_node_int;
-    new_list.remove = remove_node_int;
-    new_list.retrieve = retrieve_data_int;
+    new_list.insert = insert_node;
+    new_list.remove = remove_node;
+    new_list.retrieve = retrieve_data;
 
     return new_list;
 }
 
-struct Node_int *create_node_int(int data) {
-    struct Node_int* new_node = (struct Node_int*)malloc(sizeof(struct Node_int));
+struct Node *create_node(void* data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
     if (new_node == NULL) {
         fprintf(stderr, "Error: Memory allocation failed for new node.\n");
         exit(EXIT_FAILURE);
@@ -34,19 +34,20 @@ struct Node_int *create_node_int(int data) {
     return new_node;
 }
 
-void destroy_node_int(struct Node_int* node_to_destroy) {
+void destroy_node(struct Node* node_to_destroy) {
     if (node_to_destroy != NULL) {
+        free(node_to_destroy->data); // Free the data if it was dynamically allocated
         free(node_to_destroy);
     }
 }
 
-struct Node_int* iterate_int(int index, struct LinkedList_int* linked_list) {
+struct Node* iterate(int index, struct LinkedList* linked_list) {
     if (index < 0 || index >= linked_list->length) {
         fprintf(stderr, "Error: Index out of bounds (%d) for list of length %d\n", index, linked_list->length);
         exit(9);
     }
 
-    struct Node_int* cursor = linked_list->head;
+    struct Node* cursor = linked_list->head;
     for (int i = 0; i < index; i++) {
         if (cursor == NULL) {
             fprintf(stderr, "Error: Unexpected NULL cursor during iteration at index %d\n", i);
@@ -58,34 +59,34 @@ struct Node_int* iterate_int(int index, struct LinkedList_int* linked_list) {
 }
 
 
-void insert_node_int(int index, int data, struct LinkedList_int *linked_list)
+void insert_node(int index, void* data, struct LinkedList *linked_list)
 {
     if (index < 0 || index > linked_list->length) {
         fprintf(stderr, "Error: Insertion index out of bounds (%d) for list of length %d.\n", index, linked_list->length);
         exit(9);
     }
 
-    struct Node_int* node_to_insert = create_node_int(data);
+    struct Node* node_to_insert = create_node(data);
 
     if (index == 0) {
         node_to_insert->next = linked_list->head;
         linked_list->head = node_to_insert;
     } else {
-        struct Node_int *cursor = iterate_int(index - 1, linked_list);
+        struct Node *cursor = iterate(index - 1, linked_list);
         node_to_insert->next = cursor->next;
         cursor->next = node_to_insert;
     }
     linked_list->length++;
 }
 
-void remove_node_int(int index, struct LinkedList_int *linked_list)
+void remove_node(int index, struct LinkedList *linked_list)
 {
     if (index < 0 || index >= linked_list->length) {
         fprintf(stderr, "Error: Removal index out of bounds (%d) for list of length %d.\n", index, linked_list->length);
         return;
     }
 
-    struct Node_int *node_to_remove = NULL;
+    struct Node *node_to_remove = NULL;
 
     if (index == 0) {
         node_to_remove = linked_list->head;
@@ -96,23 +97,23 @@ void remove_node_int(int index, struct LinkedList_int *linked_list)
         }
     }
     else {
-        struct Node_int *prev_node = iterate_int(index - 1, linked_list);
+        struct Node *prev_node = iterate(index - 1, linked_list);
 
         if (prev_node != NULL && prev_node->next != NULL) {
             node_to_remove = prev_node->next;
             prev_node->next = node_to_remove->next;
         } else {
-            fprintf(stderr, "Error: Internal logic issue during remove_node_int at index %d.\n", index);
+            fprintf(stderr, "Error: Internal logic issue during remove_node at index %d.\n", index);
             return;
         }
     }
 
-    destroy_node_int(node_to_remove);
+    destroy_node(node_to_remove);
     linked_list->length--;
 }
 
-int retrieve_data_int(int index, struct LinkedList_int *linked_list)
+void* retrieve_data(int index, struct LinkedList *linked_list)
 {
-    struct Node_int *cursor = iterate_int(index, linked_list);
+    struct Node *cursor = iterate(index, linked_list);
     return cursor->data;
 }

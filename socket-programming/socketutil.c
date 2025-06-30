@@ -1,4 +1,9 @@
 #include "socketutil.h"
+#include <stdlib.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 
 
 int createTCPIpv4Socket() { return socket(AF_INET, SOCK_STREAM, 0); }

@@ -5,9 +5,11 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 #include "socketutil.h"
-#include <bits/pthreadtypes.h>
+
+
 
 
 struct AcceptedSocket {
